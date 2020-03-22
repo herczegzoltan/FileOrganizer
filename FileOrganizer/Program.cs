@@ -19,15 +19,16 @@ namespace FileOrganizer
             List<string> filesList = Directory.GetFiles(@"C:\Users\Herczeg Zoltán\Desktop\Test").ToList();
             List<string> folderList = Directory.GetDirectories(@"C:\Users\Herczeg Zoltán\Desktop\Test").ToList();
 
-
             foreach (var item in filesList)
             {
-                var extension = Path.GetExtension(item);
-                if (true)
-                {
+                //var extension = Path.GetExtension(item);
+                //var filePathWithoutFileName = Path.GetDirectoryName(item);
+                //if (true)
+                //{
 
-                }
-                Console.WriteLine("ext:" + extension + " " + item);
+                //}
+                GetFolderNameOfFile(item);
+            //    Console.WriteLine( filePathWithoutFileName +" " +  "ext:" + extension + " " + item);
             }
 
             foreach (var item in folderList)
@@ -36,6 +37,18 @@ namespace FileOrganizer
 
                 Console.WriteLine("folder:" + getFolderName + " " + item);
             }
+        }
+
+        static bool GetFolderNameOfFile(string item)
+        {
+            var extension = Path.GetExtension(item);
+            var filePathWithoutFileName = Path.GetDirectoryName(item);
+            
+            if (!File.Exists(Path.Combine(filePathWithoutFileName,extension)))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(filePathWithoutFileName, extension));
+            }
+            return true;
         }
     }
 }
