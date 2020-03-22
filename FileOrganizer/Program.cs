@@ -116,20 +116,29 @@ namespace FileOrganizer
             var extension = Path.GetExtension(filePath);
             var name = Path.GetFileName(filePath);
             var filePathWithoutFileName = Path.GetDirectoryName(filePath);
-            try
+           
+            if (!File.Exists(Path.Combine(filePathWithoutFileName, extension, name)))
             {
-                File.Move(filePath, Path.Combine(filePathWithoutFileName, extension, name));
+                try
+                {
+                    File.Move(filePath, Path.Combine(filePathWithoutFileName, extension, name));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Could not move the file yet probably because it was large and still copying into the folder!");                
+                    try
+                    {
+                        MoveFile(filePath);
+                        Console.WriteLine("It could move the file!");
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine("Could not move the file yet probably because it was large and still copying into the folder!");                try
-                {
-                    MoveFile(filePath);
-                    Console.WriteLine("It could move the file!");
-                }
-                catch (Exception)
-                {
-                }
+                Console.WriteLine($"The file already exists in {extension} folder!");
             }
         }
 
