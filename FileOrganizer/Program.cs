@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FileOrganizer
@@ -13,11 +14,62 @@ namespace FileOrganizer
         
         static void Main(string[] args)
         {
-            string path = @"C:\Users\Herczeg Zoltán\Desktop\Test";
-            
-            
+            //            string path = @"C:\Users\Herczeg Zoltán\Desktop\Test";
 
-            Run(path);
+            string path = "";
+            Console.WriteLine("Choose which folder you want to organize!");
+
+            Console.WriteLine("1: User\\Documents!");
+            Console.WriteLine("2: User\\Downloads!");
+            Console.WriteLine("3: User\\Desktop!"); 
+            Console.WriteLine("4: Custom! example: C:\\Users\\TestUser\\Desktop\\TestFolder");
+            //string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine("Select one wiht type the correct number!");
+
+            Run(GetSelectedPath());
+
+            //if (GetSelectedPath() != "0" )
+            //{
+
+            //}
+            //else
+            //{
+            //    GetSelectedPath();
+            //}
+        }
+
+        static string GetSelectedPath()
+        {
+            string path = "";
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    return path;
+
+                case "2":
+                    string userRoot = System.Environment.GetEnvironmentVariable("USERPROFILE");
+                    path = Path.Combine(userRoot, "Downloads");
+                    return path;
+                case "3":
+                    path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    return path;
+                case "4":
+                    Console.WriteLine("Add your custom path:");
+                    string pathConsole = Console.ReadLine();
+                    if (IsValidPath(pathConsole))
+                    {
+                        Console.WriteLine("Valid Path!");
+                        path = "@" + pathConsole;
+                    }
+                    return path;
+
+                default:
+                    Console.WriteLine("Invalid selection!");
+                    path = "0"; 
+                    return path;
+            }
         }
 
         [PermissionSet(SecurityAction.Demand, Name ="FullTrust")]
@@ -91,6 +143,22 @@ namespace FileOrganizer
                 {
                 }
             }
+        }
+
+        static bool IsValidPath(string path)
+        {
+            Regex driveCheck = new Regex(@"^[a-zA-Z]:\\$");
+            if (!driveCheck.IsMatch(path.Substring(0, 3))) return false;
+            string strTheseAreInvalidFileNameChars = new string(Path.GetInvalidPathChars());
+            strTheseAreInvalidFileNameChars += @":/?*" + "\"";
+            Regex containsABadCharacter = new Regex("[" + Regex.Escape(strTheseAreInvalidFileNameChars) + "]");
+            if (containsABadCharacter.IsMatch(path.Substring(3, path.Length - 3)))
+                return false;
+
+            DirectoryInfo dir = new DirectoryInfo(Path.GetFullPath(path));
+            if (!dir.Exists)
+                dir.Create();
+            return true;
         }
     }
 }
