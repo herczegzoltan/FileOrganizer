@@ -71,7 +71,7 @@ namespace FileOrganizer
 
                 watcher.Path = path;
                 watcher.Changed += OnChanged;
-                
+
                 watcher.NotifyFilter = NotifyFilters.Size;
                 watcher.EnableRaisingEvents = true;
                 // Wait for the user to quit the program.
@@ -89,15 +89,22 @@ namespace FileOrganizer
         static void LoopThrough(string path)
         {
             //path = Path.GetDirectoryName(path);
-
-            List<string> filesList = Directory.GetFiles(path).ToList();
-            List<string> folderList = Directory.GetDirectories(path).ToList();
-
-            foreach (var item in filesList)
+            try
             {
-                GetFolderNameOfFile(item);
-                MoveFile(item);
+                List<string> filesList = Directory.GetFiles(path).ToList();
+                List<string> folderList = Directory.GetDirectories(path).ToList();
+
+                foreach (var item in filesList)
+                {
+                    GetFolderNameOfFile(item);
+                    MoveFile(item);
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+     
         }
 
         static bool GetFolderNameOfFile(string item)
