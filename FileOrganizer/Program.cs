@@ -14,29 +14,17 @@ namespace FileOrganizer
         
         static void Main(string[] args)
         {
-            //            string path = @"C:\Users\Herczeg Zoltán\Desktop\Test";
 
-            string path = "";
             Console.WriteLine("Choose which folder you want to organize!");
 
             Console.WriteLine("1: User\\Documents!");
             Console.WriteLine("2: User\\Downloads!");
-            Console.WriteLine("3: User\\Desktop!"); 
+            Console.WriteLine("3: User\\Desktop!");
             Console.WriteLine("4: Custom! example: C:\\Users\\TestUser\\Desktop\\TestFolder");
-            //string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("Select one wiht type the correct number!");
-
-            Run(GetSelectedPath());
-
-            //if (GetSelectedPath() != "0" )
-            //{
-
-            //}
-            //else
-            //{
-            //    GetSelectedPath();
-            //}
+            string path = GetSelectedPath();
+            Run(path);
         }
 
         static string GetSelectedPath()
@@ -61,7 +49,7 @@ namespace FileOrganizer
                     if (IsValidPath(pathConsole))
                     {
                         Console.WriteLine("Valid Path!");
-                        path = "@" + pathConsole;
+                        path = pathConsole;
                     }
                     return path;
 
