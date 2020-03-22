@@ -14,9 +14,7 @@ namespace FileOrganizer
         
         static void Main(string[] args)
         {
-
             Console.WriteLine("Choose which folder you want to organize!");
-
             Console.WriteLine("1: User\\Documents!");
             Console.WriteLine("2: User\\Downloads!");
             Console.WriteLine("3: User\\Desktop!");
@@ -24,6 +22,9 @@ namespace FileOrganizer
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("Select one wiht type the correct number!");
             string path = GetSelectedPath();
+            LoopThrough(path);
+            Console.WriteLine("First run was done, from now it is watching constantly till the application is closed!");
+
             Run(path);
         }
 
@@ -63,16 +64,16 @@ namespace FileOrganizer
         [PermissionSet(SecurityAction.Demand, Name ="FullTrust")]
         private static void Run(string path)
         {
+            
             using (FileSystemWatcher watcher = new FileSystemWatcher())
             {
+              //  LoopThrough(path);
 
                 watcher.Path = path;
-
                 watcher.Changed += OnChanged;
                 
                 watcher.NotifyFilter = NotifyFilters.Size;
                 watcher.EnableRaisingEvents = true;
-
                 // Wait for the user to quit the program.
                 Console.WriteLine("Press 'q' to quit .");
 
@@ -87,7 +88,7 @@ namespace FileOrganizer
 
         static void LoopThrough(string path)
         {
-            path = Path.GetDirectoryName(path);
+            //path = Path.GetDirectoryName(path);
 
             List<string> filesList = Directory.GetFiles(path).ToList();
             List<string> folderList = Directory.GetDirectories(path).ToList();
