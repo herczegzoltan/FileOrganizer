@@ -21,23 +21,18 @@ namespace FileOrganizer
 
             foreach (var item in filesList)
             {
-                //var extension = Path.GetExtension(item);
-                //var filePathWithoutFileName = Path.GetDirectoryName(item);
-                //if (true)
-                //{
-
-                //}
                 GetFolderNameOfFile(item);
-            //    Console.WriteLine( filePathWithoutFileName +" " +  "ext:" + extension + " " + item);
+                MoveFile(item);
             }
 
-            foreach (var item in folderList)
-            {
-                string getFolderName = new DirectoryInfo(Path.GetDirectoryName(item)).Name;
+            //foreach (var item in folderList)
+            //{
+            //    string getFolderName = new DirectoryInfo(Path.GetDirectoryName(item)).Name;
 
-                Console.WriteLine("folder:" + getFolderName + " " + item);
-            }
+            //    Console.WriteLine("folder:" + getFolderName + " " + item);
+            //}
         }
+
 
         static bool GetFolderNameOfFile(string item)
         {
@@ -49,6 +44,15 @@ namespace FileOrganizer
                 DirectoryInfo di = Directory.CreateDirectory(Path.Combine(filePathWithoutFileName, extension));
             }
             return true;
+        }
+
+        static void MoveFile(string filePath)
+        {
+            var extension = Path.GetExtension(filePath);
+            var name = Path.GetFileName(filePath);
+            var filePathWithoutFileName = Path.GetDirectoryName(filePath);
+
+            File.Move(filePath,Path.Combine(filePathWithoutFileName, extension,name));
         }
     }
 }
